@@ -12,7 +12,7 @@ How To Use
 ----------------
 first, resolve your domain to external server ip
 
-then, go to ./haproxy/vars/main.yml and according to given example update 
+then, open ./haproxy/vars/main.yml and according to given example update 
 
 vpn_hosts variable.
 
