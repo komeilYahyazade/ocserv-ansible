@@ -32,7 +32,6 @@ Example:
 
 ```
 ocuser username
-
 ```
 
 Output:
