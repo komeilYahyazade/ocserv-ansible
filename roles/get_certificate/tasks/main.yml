@@ -1,0 +1,36 @@
+- name:  installing the prerequistes packages for certificate
+  apt:
+    state: present
+    update_cache: yes
+    pkg:
+    - certbot
+    - nginx
+
+- name: create and place nginx config template
+  template:
+    src: templates/nginx.conf.j2
+    dest: /etc/nginx/conf.d/{{ HOST_DOMAIN }}.conf
+    force: yes
+
+- name: create web root directory
+  file:
+    path: /var/www/ocserv
+    state: directory
+    owner: www-data
+    group: www-data
+    recurse: yes
+
+- name: restart nginx
+  systemd:
+    name: nginx
+    state: restarted
+
+- name: check if certificate exists
+  stat:
+    path: '/etc/letsencrypt/live/{{ HOST_DOMAIN }}'
+  register: cert_exists
+
+- name: certbot command
+  shell:
+    cmd: "certbot certonly --non-interactive --webroot --agree-tos --email you@me.com -d {{ HOST_DOMAIN }} -w /var/www/ocserv"
+  when: not cert_exists.stat.exists

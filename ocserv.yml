@@ -1,0 +1,25 @@
+- name: get certificate for ocserv node
+  hosts: ocserv_node
+  tasks:
+  - import_role:
+      name: get_certificate
+
+
+
+- name: install openconnect vpn server
+  hosts: ocserv_node
+  tasks:
+  - import_role:
+      name: ocserv_installation
+
+- name: config openconnect vpn server
+  hosts: ocserv_node
+  tasks:
+  - import_role:
+      name: ocserv_config
+
+- name: install and config haproxy
+  hosts: haproxy_node
+  tasks:
+  - import_role:
+      name: haproxy

@@ -1,0 +1,10 @@
+server {
+      listen 80;
+      server_name {{ HOST_DOMAIN }};
+
+      root /var/www/ocserv/;
+
+      location ~ /.well-known/acme-challenge {
+         allow all;
+      }
+}

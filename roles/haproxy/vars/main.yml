@@ -1,0 +1,4 @@
+vpn_hosts:
+  - domain: example.com
+    ip: x.x.x.x
+    port: n

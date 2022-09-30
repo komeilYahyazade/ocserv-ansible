@@ -1,0 +1,63 @@
+- name:  installing the prerequistes packages
+  apt:
+    state: present
+    update_cache: yes
+    pkg:
+    - net-tools
+    - curl
+    - bmon
+    - libgnutls28-dev
+    - libev-dev
+    - libpam0g-dev
+    - liblz4-dev
+    - libseccomp-dev
+    - libreadline-dev
+    - libnl-route-3-dev
+    - libkrb5-dev
+    - libradcli-dev
+    - libcurl4-gnutls-dev
+    - libcjose-dev
+    - libjansson-dev
+    - libprotobuf-c-dev
+    - libtalloc-dev
+    - libhttp-parser-dev
+    - protobuf-c-compiler
+    - gperf
+    - nuttcp
+    - lcov
+    - libuid-wrapper
+    - libpam-wrapper
+    - libnss-wrapper
+    - libsocket-wrapper
+    - gss-ntlmssp
+    - haproxy
+    - iputils-ping
+    - freeradius
+    - gawk
+    - gnutls-bin
+    - iproute2
+    - yajl-tools
+    - tcpdump
+    - build-essential
+    - pkg-config
+    - libghc-nettle-dev
+
+- name: download ocserv source file
+  uri:
+    url: https://www.infradead.org/ocserv/download/ocserv-1.1.6.tar.xz
+    dest: ~/
+
+- name: create dir
+  file:
+    state: directory
+    path: ~/ocserv
+
+- name: Extract ocserv source file
+  unarchive:
+    src: ~/ocserv-1.1.6.tar.xz
+    dest: ~/
+    remote_src: yes
+
+- name: install ocserv
+  shell:
+    cmd: "cd ~/ocserv-1.1.6; ./configure &&  make && make install"

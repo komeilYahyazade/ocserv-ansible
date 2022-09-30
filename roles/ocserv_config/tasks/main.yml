@@ -1,0 +1,62 @@
+- name: create config directory
+  file:
+    state: directory
+    path: /etc/ocserv
+
+- name: ocserv config template
+  template:
+    src: templates/ocserv.conf.j2
+    dest: /etc/ocserv/ocserv.conf
+    force: yes
+
+- name: add systemd file
+  copy:
+    src: files/ocserv.service
+    dest: /lib/systemd/system/ocserv.service
+
+- name: enable ocserv service
+  systemd:
+    enabled: yes
+    state: restarted
+    name: ocserv
+
+- name: copy create user script
+  template:
+    src: templates/ocuser.sh.j2
+    dest: /usr/local/bin/ocuser
+    mode: '0744'
+
+- name: add ipv4 forwarding to sysctl
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    state: present
+    value: 1
+    sysctl_file: /etc/sysctl.conf
+
+- name: allow ufw firewall rules
+  ufw:
+    rule: allow
+    proto: any
+    port: '{{ item }}'
+  loop:
+    - '22'
+    - '1443'
+
+- name: enable ufw firewall
+  ufw:
+    state: enabled
+
+- name: add iptables before rule for ufw
+  template:
+    src: templates/before.rules.j2
+    dest: /etc/ufw/before.rules
+    force: yes
+
+- name: restarting the ufw
+  systemd:
+    state: restarted
+    name: ufw
+
+- name: assert iptable list
+  shell:
+    cmd: 'iptables -t nat -L POSTROUTING'

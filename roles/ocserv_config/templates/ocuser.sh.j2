@@ -1,0 +1,17 @@
+#! /bin/bash
+
+USERNAME=$1
+PASSWORD=$2
+
+if [ -z $PASSWORD ]
+then
+          PASSWORD=$(openssl rand -base64 32 | cut -c4-11)
+fi
+
+echo username: $USERNAME
+echo password: $PASSWORD
+echo host: "{{ HOST_DOMAIN }}:443"
+
+
+
+echo -e $PASSWORD | ocpasswd -c /etc/ocserv/ocpasswd $USERNAME
