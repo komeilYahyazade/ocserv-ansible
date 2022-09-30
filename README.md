@@ -24,3 +24,20 @@ ansible-playbook -i inventory.ini --become ocserv.yml
 
 At last, if all tasks done successfully, resolve your domain to internal
 server ip.
+
+
+Also we put a bash script on vpn servers (not haproxy servers) for creating new users.
+
+Example:
+
+```
+ocuser username
+
+```
+
+Output:
+```
+username: username
+password: random_password
+host: vpn.domain.com
+```
